@@ -9,8 +9,8 @@ If you use this code from the repository, please cite the work:
 @inproceedings{petrov2023gsasrec,
   title={gSASRec: Reducing Overconfidence in Sequential Recommendation Trained with Negative Sampling},
   author={Petrov, Aleksandr and Macdonald, Craig},
-  booktitle={Seventeen ACM Conference on Recommender Systems},
-  year={2022}
+  booktitle={Proceedings of the 17th ACM Conference on Recommender Systems},
+  year={2023}
 }
 ```
 
@@ -76,11 +76,11 @@ The $`\beta`$ parameter controls the model calibration level. Note that we do no
     \beta = \alpha \left(t\left(1 - \frac{1}{\alpha}\right) + \frac{1}{\alpha}\right)
 \end{align}
 ```
-Where $`\alpha`$ is the negative sampling rate: $`\frac{`|I_k^-|`}{|I| - 1}`$, and $`|I|`$ is the catalogue size. 
+where $`\alpha`$ is the negative sampling rate: $`\frac{`|I_k^-|`}{|I| - 1}`$, and $`|I|`$ is the catalogue size. 
 
 
-Two models' hyperparameters (in addition to standard SASRec's hyperparameters) are $`k`$ -- the number of negatives per positive, and $`t`$. We recommend using $`k = 256`$ and $`t=0.75`$.  
-However, if you want fully calibrated probabilities (e.g., not just to sort items but to use these probabilities as an approximation for CTR), you should set $t=1.0$. In this case, model training will take longer but converge to realistic probabilities (see proofs and experiments in the paper). 
+The additional hyperparameters in gSASRec (in addition to standard SASRec's hyperparameters) are $`k`$ -- the number of negatives per positive, and $`t`$. We recommend using $`k = 256`$ and $`t=0.75`$.  
+However, if you want fully calibrated probabilities (e.g., not just to sort items but to use these probabilities as an approximation, e.g. for CTR), you should set $t=1.0$. In this case, model training will take longer but converge to realistic probabilities (see proofs and experiments in the paper). 
 
  We do not implement gBCE explicitly. Instead, we use score positive conversion and then use the [standard BCE](https://pytorch.org/docs/stable/generated/torch.nn.functional.binary_cross_entropy_with_logits.html) loss: 
 ```math
@@ -96,7 +96,7 @@ where
 \end{align}
 ```
 
-Corresponding logits transformation code (from model training): 
+Corresponding logits transformation code (for model training): 
 ```python
         alpha = config.negs_per_pos / (num_items - 1)
         t = config.gbce_t 
